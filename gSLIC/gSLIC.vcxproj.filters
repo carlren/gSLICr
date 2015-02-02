@@ -1,69 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Inc">
+      <UniqueIdentifier>{e281ac7b-d611-4a62-9f2b-9d8e7e7e3b2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Header Files\CPU">
-      <UniqueIdentifier>{4cf718ba-5ea8-4938-bddf-8fdc46355152}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GPU">
-      <UniqueIdentifier>{c726b800-060b-4e91-b161-5b2a4efb4942}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\CPU">
-      <UniqueIdentifier>{c66d7802-34f9-451c-a284-d07d0ff67335}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GPU">
-      <UniqueIdentifier>{ac0ee76f-edb2-4b73-afea-94566069cc60}</UniqueIdentifier>
+    <Filter Include="Src">
+      <UniqueIdentifier>{502cda92-013c-43c7-af7f-898da6a9c9ef}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FastImgSeg.h">
-      <Filter>Header Files\CPU</Filter>
-    </ClInclude>
     <ClInclude Include="cudaDefines.h">
-      <Filter>Header Files\GPU</Filter>
-    </ClInclude>
-    <ClInclude Include="cudaUtil.h">
-      <Filter>Header Files\GPU</Filter>
+      <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="cudaImgTrans.h">
-      <Filter>Header Files\GPU</Filter>
-    </ClInclude>
-    <ClInclude Include="cudaSegEngine.h">
-      <Filter>Header Files\GPU</Filter>
+      <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="cudaSegSLIC.h">
-      <Filter>Header Files\GPU</Filter>
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="FastImgSeg.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="cudaSegEngine.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="cudaUtil.h">
+      <Filter>Inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="cudaImgTrans.cu">
-      <Filter>Source Files\GPU</Filter>
-    </CudaCompile>
-    <CudaCompile Include="cudaSegEngine.cu">
-      <Filter>Source Files\GPU</Filter>
-    </CudaCompile>
-    <CudaCompile Include="cudaSegSLIC.cu">
-      <Filter>Source Files\GPU</Filter>
-    </CudaCompile>
-    <CudaCompile Include="cudaUtil.cu">
-      <Filter>Source Files\GPU</Filter>
-    </CudaCompile>
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
     <ClCompile Include="FastImgSeg.cpp">
-      <Filter>Source Files\CPU</Filter>
+      <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt">
-      <Filter>Source Files\GPU</Filter>
-    </None>
+    <CudaCompile Include="cudaSegEngine.cu">
+      <Filter>Src</Filter>
+    </CudaCompile>
+    <CudaCompile Include="cudaSegSLIC.cu">
+      <Filter>Src</Filter>
+    </CudaCompile>
+    <CudaCompile Include="cudaImgTrans.cu">
+      <Filter>Src</Filter>
+    </CudaCompile>
+    <CudaCompile Include="cudaUtil.cu">
+      <Filter>Src</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

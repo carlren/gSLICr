@@ -1,9 +1,14 @@
 #include <time.h>
 #include <stdio.h>
-#include "..\gSLIC\FastImgSeg.h"
+#include "FastImgSeg.h"
 
-#include "cv.h"
-#include "highgui.h"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/core/core.hpp"
+#include "opencv2/opencv.hpp"
+
+#pragma comment( lib, "opencv_core2410.lib" )
+#pragma comment( lib, "opencv_highgui2410.lib" )
+#pragma comment( lib, "opencv_imgproc2410.lib" )
 
 using namespace std;
 
