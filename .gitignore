@@ -1,0 +1,16 @@
+*.opensdf
+*.pdb
+*.sdf
+*.suo
+*.log
+*.obj
+*.exe
+*.idb
+*.deps
+*.cache
+*.tlog
+*.lastbuildstate
+*.ilk
+*.ppm
+*.pgm
+*.lib
