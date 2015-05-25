@@ -3,6 +3,8 @@
 
 #include "engines/gSLIC_seg_engine_GPU.h"
 
+#include "gSLIC_io_tools.h"
+
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/core/core.hpp"
 #include "opencv2/opencv.hpp"
@@ -41,7 +43,7 @@ void load_image(const gSLIC::UChar4Image* inimg, Mat& outimg)
 			int idx = x + y * inimg->noDims.x;
 			outimg.at<Vec3b>(y, x)[0] = inimg_ptr[idx].r;
 			outimg.at<Vec3b>(y, x)[1] = inimg_ptr[idx].g;
-			outimg.at<Vec3b>(y, x)[3] = inimg_ptr[idx].b;
+			outimg.at<Vec3b>(y, x)[2] = inimg_ptr[idx].b;
 		}
 }
 
@@ -62,7 +64,7 @@ void main()
 	my_settings.img_size.y = 480;
 	my_settings.no_segs = 2000;
 	my_settings.spixel_size = 16;
-	my_settings.coh_weight = 0.5f;
+	my_settings.coh_weight = 0.05f;
 	my_settings.no_iters = 5;
 	my_settings.color_space = gSLIC::XYZ;
 	my_settings.seg_method = gSLIC::GIVEN_SIZE;
@@ -92,7 +94,7 @@ void main()
 		gSLIC_engine->Perform_Segmentation(in_img);
 		gSLIC_engine->Draw_Segmentation_Result(out_img);
 
-		load_image(oldFrame, out_img);
+		load_image(out_img,oldFrame);
 
 		imshow("frame", oldFrame);
 

@@ -41,9 +41,13 @@ seg_engine_GPU::seg_engine_GPU(const settings& in_settings) : seg_engine(in_sett
 	{
 		float cluster_size = (float)(in_settings.img_size.x * in_settings.img_size.x) / (float)in_settings.no_segs;
 		spixel_size = ceil(sqrtf(cluster_size));
+		spixel_size = spixel_size > MAX_SPIXEL_SIZE ? MAX_SPIXEL_SIZE : spixel_size;
 	}
-	spixel_size = spixel_size > MAX_SPIXEL_SIZE ? MAX_SPIXEL_SIZE : spixel_size;
-
+	else
+	{
+		spixel_size = in_settings.spixel_size > MAX_SPIXEL_SIZE ? MAX_SPIXEL_SIZE : in_settings.spixel_size;
+	}
+	
 	int spixel_per_col = ceil(in_settings.img_size.x / spixel_size);
 	int spixel_per_row = ceil(in_settings.img_size.y / spixel_size);
 	
@@ -92,6 +96,14 @@ void gSLIC::engines::seg_engine_GPU::Init_Cluster_Centers()
 
 void gSLIC::engines::seg_engine_GPU::Find_Center_Association()
 {
+	//spixel_map->UpdateHostFromDevice();
+	//cvt_img->UpdateHostFromDevice();
+	//idx_img->UpdateHostFromDevice();
+
+	//spixel_info* spixel_list = spixel_map->GetData(MEMORYDEVICE_CPU);
+	//Vector4f* img_ptr = cvt_img->GetData(MEMORYDEVICE_CPU);
+	//int* idx_ptr = idx_img->GetData(MEMORYDEVICE_CPU);
+
 	spixel_info* spixel_list = spixel_map->GetData(MEMORYDEVICE_CUDA);
 	Vector4f* img_ptr = cvt_img->GetData(MEMORYDEVICE_CUDA);
 	int* idx_ptr = idx_img->GetData(MEMORYDEVICE_CUDA);
@@ -99,10 +111,18 @@ void gSLIC::engines::seg_engine_GPU::Find_Center_Association()
 	Vector2i map_size = spixel_map->noDims;
 	Vector2i img_size = cvt_img->noDims;
 
+	//for (int y = 0; y < img_size.y; y++)
+	//{
+	//	for (int x = 0; x < img_size.x; x++)
+	//	{
+	//		find_center_association_shared(img_ptr, spixel_list, idx_ptr, map_size, img_size, spixel_size, gslic_settings.coh_weight, x, y);
+	//	}
+	//}
+
 	dim3 blockSize(BLOCK_DIM, BLOCK_DIM);
 	dim3 gridSize((int)ceil((float)img_size.x / (float)blockSize.x), (int)ceil((float)img_size.y / (float)blockSize.y));
 
-	Find_Center_Association_device<< <gridSize, blockSize >> >(img_ptr, spixel_list, idx_ptr, map_size, img_size, spixel_size, gslic_settings.coh_weight);
+	Find_Center_Association_device << <gridSize, blockSize >> >(img_ptr, spixel_list, idx_ptr, map_size, img_size, spixel_size, gslic_settings.coh_weight);
 }
 
 void gSLIC::engines::seg_engine_GPU::Update_Cluster_Center()

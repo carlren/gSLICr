@@ -99,14 +99,14 @@ _CPU_AND_GPU_CODE_ inline void find_center_association_shared(const gSLIC::Vecto
 	int ctr_x = x / spixel_size;
 	int ctr_y = y / spixel_size;
 
-	bool minidx = -1;
+	int minidx = -1;
 	float dist = 999999.9999f;
 
 	// search 3x3 neighborhood
-	for (int i = -1; i <= 0; i++) for (int j = -1; j <= 0; j++)
+	for (int i = -1; i <= 1; i++) for (int j = -1; j <= 1; j++)
 	{
 		int ctr_x_check = ctr_x + j;
-		int ctr_y_check = ctr_y + x;
+		int ctr_y_check = ctr_y + i;
 		if (ctr_x_check >= 0 && ctr_y_check >= 0 && ctr_x_check < map_size.x && ctr_y_check < map_size.y)
 		{
 			int ctr_idx = ctr_y_check*map_size.x + ctr_x_check;
