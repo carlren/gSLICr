@@ -13,6 +13,12 @@
     <Filter Include="Uitls">
       <UniqueIdentifier>{8f3eea0c-a4a4-496c-90bf-b9cd03926394}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engines">
+      <UniqueIdentifier>{f909bb87-6570-4794-ad6c-b7a211d87059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{b67d9a6b-467b-4be8-8daf-3281fc26a600}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cudaDefines.h">
@@ -22,9 +28,6 @@
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="cudaSegSLIC.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="FastImgSeg.h">
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="cudaSegEngine.h">
@@ -69,13 +72,31 @@
     <ClInclude Include="NVTimer.h">
       <Filter>Uitls</Filter>
     </ClInclude>
+    <ClInclude Include="Engines\gSLIC_seg_engine.h">
+      <Filter>Engines</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\gSLIC_settings.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="objects\gSLIC_spixel_info.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="engines\gSLIC_core_engine.h">
+      <Filter>Engines</Filter>
+    </ClInclude>
+    <ClInclude Include="engines\gSLIC_seg_engine_GPU.h">
+      <Filter>Engines</Filter>
+    </ClInclude>
+    <ClInclude Include="engines\gSLIC_seg_engine_shared.h">
+      <Filter>Engines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="FastImgSeg.cpp">
-      <Filter>Src</Filter>
+    <ClCompile Include="Engines\gSLIC_seg_engine.cpp">
+      <Filter>Engines</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +111,9 @@
     </CudaCompile>
     <CudaCompile Include="cudaUtil.cu">
       <Filter>Src</Filter>
+    </CudaCompile>
+    <CudaCompile Include="engines\gSLIC_seg_engine_GPU.cu">
+      <Filter>Engines</Filter>
     </CudaCompile>
   </ItemGroup>
 </Project>

@@ -24,10 +24,15 @@
     <ClInclude Include="cudaSegEngine.h" />
     <ClInclude Include="cudaSegSLIC.h" />
     <ClInclude Include="cudaUtil.h" />
-    <ClInclude Include="FastImgSeg.h" />
+    <ClInclude Include="engines\gSLIC_core_engine.h" />
+    <ClInclude Include="Engines\gSLIC_seg_engine.h" />
+    <ClInclude Include="engines\gSLIC_seg_engine_GPU.h" />
+    <ClInclude Include="engines\gSLIC_seg_engine_shared.h" />
     <ClInclude Include="gSLIC_defines.h" />
     <ClInclude Include="gSLIC_io_tools.h" />
     <ClInclude Include="NVTimer.h" />
+    <ClInclude Include="Objects\gSLIC_settings.h" />
+    <ClInclude Include="objects\gSLIC_spixel_info.h" />
     <ClInclude Include="ORUtils\CUDADefines.h" />
     <ClInclude Include="ORUtils\Image.h" />
     <ClInclude Include="ORUtils\LexicalCast.h" />
@@ -39,7 +44,7 @@
     <ClInclude Include="ORUtils\Vector.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FastImgSeg.cpp" />
+    <ClCompile Include="Engines\gSLIC_seg_engine.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +52,7 @@
     <CudaCompile Include="cudaSegEngine.cu" />
     <CudaCompile Include="cudaSegSLIC.cu" />
     <CudaCompile Include="cudaUtil.cu" />
+    <CudaCompile Include="engines\gSLIC_seg_engine_GPU.cu" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{50D272E1-3C8D-4D76-A1CB-5E0775F2B0BE}</ProjectGuid>
