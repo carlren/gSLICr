@@ -25,6 +25,18 @@
     <ClInclude Include="cudaSegSLIC.h" />
     <ClInclude Include="cudaUtil.h" />
     <ClInclude Include="FastImgSeg.h" />
+    <ClInclude Include="gSLIC_defines.h" />
+    <ClInclude Include="gSLIC_io_tools.h" />
+    <ClInclude Include="NVTimer.h" />
+    <ClInclude Include="ORUtils\CUDADefines.h" />
+    <ClInclude Include="ORUtils\Image.h" />
+    <ClInclude Include="ORUtils\LexicalCast.h" />
+    <ClInclude Include="ORUtils\MathUtils.h" />
+    <ClInclude Include="ORUtils\Matrix.h" />
+    <ClInclude Include="ORUtils\MemoryBlock.h" />
+    <ClInclude Include="ORUtils\MemoryBlockPersister.h" />
+    <ClInclude Include="ORUtils\PlatformIndependence.h" />
+    <ClInclude Include="ORUtils\Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FastImgSeg.cpp" />
