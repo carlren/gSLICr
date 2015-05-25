@@ -23,12 +23,9 @@ seg_engine::~seg_engine()
 
 void seg_engine::Perform_Segmentation(UChar4Image* in_img)
 {
-	has_segmented = false;
-	has_img_loaded = false;
-}
+	source_img->SetFrom(in_img, UChar4Image::MemoryCopyDirection::CPU_TO_CUDA);
+	Cvt_Img_Space(source_img, cvt_img, gslic_settings.color_space);
 
-void seg_engine::Perform_Segmentation(UChar4Image* in_img)
-{
 	Init_Cluster_Centers();
 	for (int i = 0; i < gslic_settings.no_iters; i++)
 	{
@@ -44,33 +41,5 @@ void seg_engine::Enforce_Connectivity()
 
 }
 
-
-//void FastImgSeg::Tool_GetMarkedImg()
-//{
-//	if (!bSegmented)
-//	{
-//		return;
-//	}
-//
-//	memcpy(markedImg,sourceImage,width*height*4*sizeof(unsigned char));
-//
-//	for (int i=1;i<height-1;i++)
-//	{
-//		for (int j=1;j<width-1;j++)
-//		{
-//			int mskIndex=i*width+j;
-//			if (segMask[mskIndex]!=segMask[mskIndex+1] 
-//			|| segMask[mskIndex]!=segMask[(i-1)*width+j]
-//			|| segMask[mskIndex]!=segMask[mskIndex-1]
-//			|| segMask[mskIndex]!=segMask[(i+1)*width+j])
-//			{
-//				markedImg[mskIndex*4]=0;
-//				markedImg[mskIndex*4+1]=0;
-//				markedImg[mskIndex*4+2]=255;
-//			}
-//		}
-//	}
-//
-//}
 
 

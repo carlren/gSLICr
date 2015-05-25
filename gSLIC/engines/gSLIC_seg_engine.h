@@ -36,7 +36,7 @@ namespace gSLIC
 		public:
 
 			seg_engine(const objects::settings& in_settings );
-			~seg_engine();
+			virtual ~seg_engine();
 
 			const IntImage* Get_Seg_Mask() const {
 				if (has_segmented) return idx_img;

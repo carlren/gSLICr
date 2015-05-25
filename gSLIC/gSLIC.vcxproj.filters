@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Inc">
-      <UniqueIdentifier>{e281ac7b-d611-4a62-9f2b-9d8e7e7e3b2f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src">
-      <UniqueIdentifier>{502cda92-013c-43c7-af7f-898da6a9c9ef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ORUtils">
       <UniqueIdentifier>{8e8210dd-6313-4707-af18-1e508e905f47}</UniqueIdentifier>
     </Filter>
@@ -21,21 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cudaDefines.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="cudaImgTrans.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="cudaSegSLIC.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="cudaSegEngine.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="cudaUtil.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
     <ClInclude Include="ORUtils\CUDADefines.h">
       <Filter>ORUtils</Filter>
     </ClInclude>
@@ -92,26 +71,12 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
     <ClCompile Include="Engines\gSLIC_seg_engine.cpp">
       <Filter>Engines</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="cudaSegEngine.cu">
-      <Filter>Src</Filter>
-    </CudaCompile>
-    <CudaCompile Include="cudaSegSLIC.cu">
-      <Filter>Src</Filter>
-    </CudaCompile>
-    <CudaCompile Include="cudaImgTrans.cu">
-      <Filter>Src</Filter>
-    </CudaCompile>
-    <CudaCompile Include="cudaUtil.cu">
-      <Filter>Src</Filter>
-    </CudaCompile>
     <CudaCompile Include="engines\gSLIC_seg_engine_GPU.cu">
       <Filter>Engines</Filter>
     </CudaCompile>

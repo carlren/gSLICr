@@ -19,11 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cudaDefines.h" />
-    <ClInclude Include="cudaImgTrans.h" />
-    <ClInclude Include="cudaSegEngine.h" />
-    <ClInclude Include="cudaSegSLIC.h" />
-    <ClInclude Include="cudaUtil.h" />
     <ClInclude Include="engines\gSLIC_core_engine.h" />
     <ClInclude Include="Engines\gSLIC_seg_engine.h" />
     <ClInclude Include="engines\gSLIC_seg_engine_GPU.h" />
@@ -48,10 +43,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="cudaImgTrans.cu" />
-    <CudaCompile Include="cudaSegEngine.cu" />
-    <CudaCompile Include="cudaSegSLIC.cu" />
-    <CudaCompile Include="cudaUtil.cu" />
     <CudaCompile Include="engines\gSLIC_seg_engine_GPU.cu" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
