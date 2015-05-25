@@ -77,3 +77,17 @@ _CPU_AND_GPU_CODE_ inline void init_cluster_centers_shared(const gSLIC::Vector4f
 	out_spixel[cluster_idx].accum_color_info = gSLIC::Vector4f(0,0,0,0);
 	out_spixel[cluster_idx].no_pixels = 0;
 }
+
+_CPU_AND_GPU_CODE_ inline float compute_slic_distance(const gSLIC::Vector4f& pix, int x, int y, const gSLIC::objects::spixel_info& center_info, float weight)
+{
+	float dcolor = (pix.x - center_info.color_info.x)*(pix.x - center_info.color_info.x)
+				 + (pix.y - center_info.color_info.y)*(pix.y - center_info.color_info.y)
+				 + (pix.z - center_info.color_info.z)*(pix.z - center_info.color_info.z);
+	dcolor = sqrtf(dcolor);
+
+	float dxy = (x - center_info.center.x) * (x - center_info.center.x)
+			  + (y - center_info.center.y) * (y - center_info.center.y);
+	dxy = sqrtf(dxy);
+
+	return dcolor + weight * dxy;
+}

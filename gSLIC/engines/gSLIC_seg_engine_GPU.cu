@@ -17,7 +17,7 @@ __global__ void Cvt_Img_Space_device(const Vector4u* inimg, Vector4f* outimg, Ve
 
 __global__ void Init_Cluster_Centers_device(const Vector4f* inimg, spixel_info* out_spixel, Vector2i map_size, Vector2i img_size, int spixel_size);
 
-__global__ void Find_Center_Association_device();
+__global__ void Find_Center_Association_device(const Vector4f* inimg, spixel_info* out_spixel, Vector2i map_size, Vector2i img_size, int spixel_size, float weight);
 // ----------------------------------------------------
 //
 //	host function implementations
@@ -67,12 +67,21 @@ void gSLIC::engines::seg_engine_GPU::Init_Cluster_Centers()
 	dim3 blockSize(BLOCK_DIM, BLOCK_DIM);
 	dim3 gridSize((int)ceil((float)map_size.x / (float)blockSize.x), (int)ceil((float)map_size.y / (float)blockSize.y));
 
-
+	Init_Cluster_Centers_device << <gridSize, blockSize >> >(img_ptr, spixel_list, map_size, img_size, spixel_size);
 }
 
 void gSLIC::engines::seg_engine_GPU::Find_Center_Association()
 {
+	spixel_info* spixel_list = spixel_map->GetData(MEMORYDEVICE_CUDA);
+	Vector4f* img_ptr = cvt_img->GetData(MEMORYDEVICE_CUDA);
 
+	Vector2i map_size = spixel_map->noDims;
+	Vector2i img_size = cvt_img->noDims;
+
+	dim3 blockSize(spixel_size, spixel_size);
+	dim3 gridSize(map_size.x,map_size.y);
+	
+	Find_Center_Association_device<< <gridSize, blockSize >> >(img_ptr, spixel_list, map_size, img_size, spixel_size, gslic_settings.coh_weight);
 }
 
 void gSLIC::engines::seg_engine_GPU::Enforce_Connectivity()
@@ -101,4 +110,50 @@ __global__ void Init_Cluster_Centers_device(const Vector4f* inimg, spixel_info* 
 	if (x > map_size.x - 1 || y > map_size.y - 1) return;
 
 	init_cluster_centers_shared(inimg, out_spixel, map_size, img_size, spixel_size, x, y);
+}
+
+__global__ void Find_Center_Association_device(const Vector4f* inimg, spixel_info* out_spixel, Vector2i map_size, Vector2i img_size, int spixel_size, float weight)
+{
+	int x = threadIdx.x + blockIdx.x * blockDim.x, y = threadIdx.y + blockIdx.y * blockDim.y;
+	if (x > img_size.x - 1 || y > img_size.y - 1) return;
+
+	// load center information into shared memory
+	__shared__ spixel_info shared_spixel_info[3][3];
+	__shared__ bool shared_valid_mask[3][3];
+
+	if (threadIdx.x<3 && threadIdx.y<3)
+	{
+		int ct_x = blockIdx.x + threadIdx.x - 1;
+		int ct_y = blockIdx.y + threadIdx.y - 1;
+
+		if (ct_x >=0 && ct_y >=0 && ct_x < map_size.x && ct_y < map_size.y)
+		{
+			int ct_idx = ct_y*map_size.x + ct_x;
+			shared_spixel_info[threadIdx.x][threadIdx.y] = out_spixel[ct_idx];
+			shared_valid_mask[threadIdx.x][threadIdx.y] = true;
+		}
+		else
+		{
+			shared_valid_mask[threadIdx.x][threadIdx.y] = false;
+		}
+	}
+	__syncthreads();
+
+	int idx_img = y * img_size.x + x;
+	bool minidx = -1;
+	float dist = 999999.9999f;
+	for (int i = 0; i < 3; i++) for (int j = 0; j < 3; j++)
+	{
+		if (shared_valid_mask[i][j])
+		{
+			float cdist = compute_slic_distance(inimg[idx_img], x, y, shared_spixel_info[i][j], weight);
+			if (cdist<dist)
+			{
+				dist = cdist;
+				minidx = shared_spixel_info[i][j].id;
+			}
+		}
+	}
+	
+	if (minidx>=0) 
 }
