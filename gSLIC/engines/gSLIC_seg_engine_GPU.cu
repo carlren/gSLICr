@@ -1,6 +1,8 @@
 #include "gSLIC_seg_engine_GPU.h"
 #include "gSLIC_seg_engine_shared.h"
 
+#include "../gSLIC_io_tools.h"
+
 using namespace std;
 using namespace gSLIC;
 using namespace gSLIC::objects;
@@ -41,11 +43,12 @@ seg_engine_GPU::seg_engine_GPU(const settings& in_settings) : seg_engine(in_sett
 	{
 		float cluster_size = (float)(in_settings.img_size.x * in_settings.img_size.x) / (float)in_settings.no_segs;
 		spixel_size = ceil(sqrtf(cluster_size));
-		spixel_size = spixel_size > MAX_SPIXEL_SIZE ? MAX_SPIXEL_SIZE : spixel_size;
+		//spixel_size = spixel_size > MAX_SPIXEL_SIZE ? MAX_SPIXEL_SIZE : spixel_size;
 	}
 	else
 	{
-		spixel_size = in_settings.spixel_size > MAX_SPIXEL_SIZE ? MAX_SPIXEL_SIZE : in_settings.spixel_size;
+		spixel_size = in_settings.spixel_size;
+		//spixel_size = in_settings.spixel_size > MAX_SPIXEL_SIZE ? MAX_SPIXEL_SIZE : in_settings.spixel_size;
 	}
 	
 	int spixel_per_col = ceil(in_settings.img_size.x / spixel_size);
@@ -96,6 +99,7 @@ void gSLIC::engines::seg_engine_GPU::Init_Cluster_Centers()
 
 void gSLIC::engines::seg_engine_GPU::Find_Center_Association()
 {
+	//// for CPU version
 	//spixel_map->UpdateHostFromDevice();
 	//cvt_img->UpdateHostFromDevice();
 	//idx_img->UpdateHostFromDevice();
@@ -104,13 +108,6 @@ void gSLIC::engines::seg_engine_GPU::Find_Center_Association()
 	//Vector4f* img_ptr = cvt_img->GetData(MEMORYDEVICE_CPU);
 	//int* idx_ptr = idx_img->GetData(MEMORYDEVICE_CPU);
 
-	spixel_info* spixel_list = spixel_map->GetData(MEMORYDEVICE_CUDA);
-	Vector4f* img_ptr = cvt_img->GetData(MEMORYDEVICE_CUDA);
-	int* idx_ptr = idx_img->GetData(MEMORYDEVICE_CUDA);
-
-	Vector2i map_size = spixel_map->noDims;
-	Vector2i img_size = cvt_img->noDims;
-
 	//for (int y = 0; y < img_size.y; y++)
 	//{
 	//	for (int x = 0; x < img_size.x; x++)
@@ -118,6 +115,13 @@ void gSLIC::engines::seg_engine_GPU::Find_Center_Association()
 	//		find_center_association_shared(img_ptr, spixel_list, idx_ptr, map_size, img_size, spixel_size, gslic_settings.coh_weight, x, y);
 	//	}
 	//}
+
+	spixel_info* spixel_list = spixel_map->GetData(MEMORYDEVICE_CUDA);
+	Vector4f* img_ptr = cvt_img->GetData(MEMORYDEVICE_CUDA);
+	int* idx_ptr = idx_img->GetData(MEMORYDEVICE_CUDA);
+
+	Vector2i map_size = spixel_map->noDims;
+	Vector2i img_size = cvt_img->noDims;
 
 	dim3 blockSize(BLOCK_DIM, BLOCK_DIM);
 	dim3 gridSize((int)ceil((float)img_size.x / (float)blockSize.x), (int)ceil((float)img_size.y / (float)blockSize.y));
@@ -215,14 +219,17 @@ __global__ void Update_Cluster_Center_device(const Vector4f* inimg, const int* i
 	__shared__ Vector4f color_shared[BLOCK_DIM*BLOCK_DIM];
 	__shared__ Vector2f xy_shared[BLOCK_DIM*BLOCK_DIM];
 	__shared__ int count_shared[BLOCK_DIM*BLOCK_DIM];
-	__shared__ bool should_add; should_add = false;
+	__shared__ bool should_add; 
 
 	color_shared[local_id] = Vector4f(0, 0, 0, 0);
 	xy_shared[local_id] = Vector2f(0, 0);
 	count_shared[local_id] = 0;
+	should_add = false;
 	__syncthreads();
 
-	int spixel_id = blockIdx.y * blockDim.x + blockIdx.x;
+	int no_blocks_per_spixel = gridDim.z;
+
+	int spixel_id = blockIdx.y * map_size.x + blockIdx.x;
 
 	// compute the relative position in the search window
 	int block_x = blockIdx.z % no_blocks_per_line;
@@ -295,17 +302,18 @@ __global__ void Update_Cluster_Center_device(const Vector4f* inimg, const int* i
 			count_shared[local_id] += count_shared[local_id + 2];
 			count_shared[local_id] += count_shared[local_id + 1];
 		}
-		__syncthreads();
-
 	}
+	__syncthreads();
 
 	if (local_id == 0)
 	{
-		int accum_map_idx = blockIdx.y * blockDim.x *  blockDim.z + blockIdx.x * blockDim.z + blockIdx.z;
+		int accum_map_idx = spixel_id * no_blocks_per_spixel + blockIdx.z;
 		accum_map[accum_map_idx].center = xy_shared[0];
-		accum_map[accum_map_idx].color_info = count_shared[0];
+		accum_map[accum_map_idx].color_info = color_shared[0];
 		accum_map[accum_map_idx].no_pixels = count_shared[0];
 	}
+
+
 }
 
 __global__ void Finalize_Reduction_Result_device(const spixel_info* accum_map, spixel_info* spixel_list, Vector2i map_size, int no_blocks_per_spixel)
@@ -313,25 +321,6 @@ __global__ void Finalize_Reduction_Result_device(const spixel_info* accum_map, s
 	int x = threadIdx.x + blockIdx.x * blockDim.x, y = threadIdx.y + blockIdx.y * blockDim.y;
 	if (x > map_size.x - 1 || y > map_size.y - 1) return;
 
-	int spixel_idx = y * map_size.x + x;
-
-	spixel_list[spixel_idx].center = Vector2f(0, 0);
-	spixel_list[spixel_idx].color_info = Vector4f(0, 0, 0, 0);
-	spixel_list[spixel_idx].no_pixels = 0;
-
-	for (int i = 0; i < no_blocks_per_spixel;i++)
-	{
-		int accum_list_idx = y * map_size.x * no_blocks_per_spixel + x * no_blocks_per_spixel + x;
-		
-		spixel_list[spixel_idx].center += accum_map[accum_list_idx].center;
-		spixel_list[spixel_idx].color_info += accum_map[accum_list_idx].color_info;
-		spixel_list[spixel_idx].no_pixels += accum_map[accum_list_idx].no_pixels;
-	}
-
-	if (spixel_list[spixel_idx].no_pixels!=0)
-	{
-		spixel_list[spixel_idx].center /= (float)spixel_list[spixel_idx].no_pixels;
-		spixel_list[spixel_idx].color_info /= (float)spixel_list[spixel_idx].no_pixels;
-	}
+	finalize_reduction_result_shared(accum_map, spixel_list, map_size, no_blocks_per_spixel, x, y);
 }
 

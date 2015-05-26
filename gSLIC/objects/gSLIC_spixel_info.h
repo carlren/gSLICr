@@ -10,9 +10,6 @@ namespace gSLIC
 			Vector2f center;
 			Vector4f color_info;
 			int id;
-
-			Vector2f accum_center;
-			Vector4f accum_color_info;
 			int no_pixels;
 		};
 	}

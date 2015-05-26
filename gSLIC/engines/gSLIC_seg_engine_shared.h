@@ -73,8 +73,6 @@ _CPU_AND_GPU_CODE_ inline void init_cluster_centers_shared(const gSLIC::Vector4f
 	out_spixel[cluster_idx].center = gSLIC::Vector2f(img_x, img_y);
 	out_spixel[cluster_idx].color_info = inimg[img_y*img_size.x + img_x];
 	
-	out_spixel[cluster_idx].accum_center = gSLIC::Vector2f(0, 0);
-	out_spixel[cluster_idx].accum_color_info = gSLIC::Vector4f(0,0,0,0);
 	out_spixel[cluster_idx].no_pixels = 0;
 }
 
@@ -136,5 +134,29 @@ _CPU_AND_GPU_CODE_ inline void draw_superpixel_boundry_shared(const int* idx_img
 	else
 	{
 		outimg[idx] = sourceimg[idx];
+	}
+}
+
+_CPU_AND_GPU_CODE_ inline void finalize_reduction_result_shared(const gSLIC::objects::spixel_info* accum_map, gSLIC::objects::spixel_info* spixel_list, gSLIC::Vector2i map_size, int no_blocks_per_spixel, int x, int y)
+{
+	int spixel_idx = y * map_size.x + x;
+
+	spixel_list[spixel_idx].center = gSLIC::Vector2f(0, 0);
+	spixel_list[spixel_idx].color_info = gSLIC::Vector4f(0, 0, 0, 0);
+	spixel_list[spixel_idx].no_pixels = 0;
+
+	for (int i = 0; i < no_blocks_per_spixel; i++)
+	{
+		int accum_list_idx = spixel_idx * no_blocks_per_spixel + i;
+
+		spixel_list[spixel_idx].center += accum_map[accum_list_idx].center;
+		spixel_list[spixel_idx].color_info += accum_map[accum_list_idx].color_info;
+		spixel_list[spixel_idx].no_pixels += accum_map[accum_list_idx].no_pixels;
+	}
+
+	if (spixel_list[spixel_idx].no_pixels != 0)
+	{
+		spixel_list[spixel_idx].center /= (float)spixel_list[spixel_idx].no_pixels;
+		spixel_list[spixel_idx].color_info /= (float)spixel_list[spixel_idx].no_pixels;
 	}
 }

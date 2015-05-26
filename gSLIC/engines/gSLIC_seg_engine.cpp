@@ -30,21 +30,14 @@ void seg_engine::Perform_Segmentation(UChar4Image* in_img)
 
 	Init_Cluster_Centers();
 
-	//spixel_map->UpdateHostFromDevice();
-	//for (int i = 0; i < spixel_map->dataSize; i++)
-	//{
-	//	cout << spixel_map->GetData(MEMORYDEVICE_CPU)[i].id<<endl;
-	//}
-
-
-	//for (int i = 0; i < gslic_settings.no_iters; i++)
-	//{
-	//	Find_Center_Association();
-	//	Update_Cluster_Center();
-	//}
-
+	for (int i = 0; i < gslic_settings.no_iters; i++)
+	{
+		Find_Center_Association();
+		Update_Cluster_Center();
+	}
 	Find_Center_Association();
 	//Enforce_Connectivity();
+	cudaThreadSynchronize();
 }
 
 void seg_engine::Enforce_Connectivity()

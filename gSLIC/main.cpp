@@ -1,7 +1,7 @@
 #include <time.h>
 #include <stdio.h>
 
-#include "engines/gSLIC_seg_engine_GPU.h"
+#include "engines/gSLIC_core_engine.h"
 
 #include "gSLIC_io_tools.h"
 
@@ -60,27 +60,25 @@ void main()
 	
 	gSLIC::objects::settings my_settings;
 
-	my_settings.img_size.x = 640;
-	my_settings.img_size.y = 480;
+	my_settings.img_size.x = 1920;
+	my_settings.img_size.y = 1080;
 	my_settings.no_segs = 2000;
-	my_settings.spixel_size = 16;
-	my_settings.coh_weight = 0.05f;
+	my_settings.spixel_size = 30;
+	my_settings.coh_weight = 0.01f;
 	my_settings.no_iters = 5;
 	my_settings.color_space = gSLIC::XYZ;
 	my_settings.seg_method = gSLIC::GIVEN_SIZE;
 
 	my_settings.useGPU = true;
 
-
-	gSLIC::engines::seg_engine_GPU* gSLIC_engine = new gSLIC::engines::seg_engine_GPU(my_settings);
+	gSLIC::engines::core_engine* gSLIC_engine = new gSLIC::engines::core_engine(my_settings);
 
 	gSLIC::UChar4Image* in_img = new gSLIC::UChar4Image(my_settings.img_size, true, true);
 	gSLIC::UChar4Image* out_img = new gSLIC::UChar4Image(my_settings.img_size, true, true);
 
 	Mat oldFrame;
 	Mat frame;
-	Size s(640, 480);
-
+	Size s(my_settings.img_size.x, my_settings.img_size.y);
 
 	unsigned char* imgBuffer = (unsigned char*)malloc(frame.cols*frame.rows*sizeof(unsigned char) * 4);
 	memset(imgBuffer, 0, frame.cols*frame.rows * sizeof(unsigned char) * 4);
@@ -89,16 +87,16 @@ void main()
 	{
 		resize(oldFrame, frame, s);
 		
-		load_image(oldFrame, in_img);
+		load_image(frame, in_img);
 
-		gSLIC_engine->Perform_Segmentation(in_img);
+		gSLIC_engine->Process_Frame(in_img);
 		gSLIC_engine->Draw_Segmentation_Result(out_img);
 
-		load_image(out_img,oldFrame);
+		load_image(out_img, frame);
 
-		imshow("frame", oldFrame);
+		imshow("frame", frame);
 
-		if( cvWaitKey(10) == 27 )break;
+		if( waitKey(10) == 27 )break;
 	}
 
 	destroyAllWindows();
