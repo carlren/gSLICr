@@ -11,6 +11,7 @@ namespace gSLIC
 
 			int no_grid_per_center;
 			ORUtils::Image<objects::spixel_info>* accum_map;
+			IntImage* tmp_idx_img;
 
 		protected:
 			void Cvt_Img_Space(UChar4Image* inimg, Float4Image* outimg, COLOR_SPACE color_space);

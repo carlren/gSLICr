@@ -40,10 +40,5 @@ void seg_engine::Perform_Segmentation(UChar4Image* in_img)
 	cudaThreadSynchronize();
 }
 
-void seg_engine::Enforce_Connectivity()
-{
-
-}
-
 
 

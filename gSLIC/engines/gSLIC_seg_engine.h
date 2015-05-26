@@ -11,6 +11,10 @@ namespace gSLIC
 		{
 		protected:
 
+			// normalizing distances
+			float max_color_dist;
+			float max_xy_dist;
+
 			// images
 			UChar4Image *source_img;
 			Float4Image *cvt_img;
@@ -25,13 +29,11 @@ namespace gSLIC
 
 			objects::settings gslic_settings;
 
-
-
 			virtual void Cvt_Img_Space(UChar4Image* inimg, Float4Image* outimg, COLOR_SPACE color_space) = 0;
 			virtual void Init_Cluster_Centers() = 0;
 			virtual void Find_Center_Association() = 0;
 			virtual void Update_Cluster_Center() = 0;
-			virtual void Enforce_Connectivity();
+			virtual void Enforce_Connectivity() = 0;
 
 		public:
 

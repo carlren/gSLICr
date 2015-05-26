@@ -13,7 +13,9 @@ namespace gSLIC
 			int no_iters;
 			float coh_weight;
 			
-			bool useGPU;
+			bool enforce_connectivity;
+
+			bool useGPU; // to be removed
 
 			COLOR_SPACE color_space;
 			SEG_METHOD seg_method;

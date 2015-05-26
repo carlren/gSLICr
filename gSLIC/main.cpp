@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "engines/gSLIC_core_engine.h"
+//#include "engines/gSLIC_seg_engine_shared.h"
 
 #include "gSLIC_io_tools.h"
 
@@ -27,9 +28,9 @@ void load_image(const Mat& inimg, gSLIC::UChar4Image* outimg)
 		for (int x = 0; x < outimg->noDims.x; x++)
 		{
 			int idx = x + y * outimg->noDims.x;
-			outimg_ptr[idx].r = inimg.at<Vec3b>(y, x)[0];
+			outimg_ptr[idx].b = inimg.at<Vec3b>(y, x)[0];
 			outimg_ptr[idx].g = inimg.at<Vec3b>(y, x)[1];
-			outimg_ptr[idx].b = inimg.at<Vec3b>(y, x)[2];
+			outimg_ptr[idx].r = inimg.at<Vec3b>(y, x)[2];
 		}
 }
 
@@ -41,9 +42,9 @@ void load_image(const gSLIC::UChar4Image* inimg, Mat& outimg)
 		for (int x = 0; x < inimg->noDims.x; x++)
 		{
 			int idx = x + y * inimg->noDims.x;
-			outimg.at<Vec3b>(y, x)[0] = inimg_ptr[idx].r;
+			outimg.at<Vec3b>(y, x)[0] = inimg_ptr[idx].b;
 			outimg.at<Vec3b>(y, x)[1] = inimg_ptr[idx].g;
-			outimg.at<Vec3b>(y, x)[2] = inimg_ptr[idx].b;
+			outimg.at<Vec3b>(y, x)[2] = inimg_ptr[idx].r;
 		}
 }
 
@@ -60,13 +61,13 @@ void main()
 	
 	gSLIC::objects::settings my_settings;
 
-	my_settings.img_size.x = 1920;
-	my_settings.img_size.y = 1080;
+	my_settings.img_size.x = 640;
+	my_settings.img_size.y = 480;
 	my_settings.no_segs = 2000;
-	my_settings.spixel_size = 30;
-	my_settings.coh_weight = 0.01f;
+	my_settings.spixel_size = 16;
+	my_settings.coh_weight = 1.0f;
 	my_settings.no_iters = 5;
-	my_settings.color_space = gSLIC::XYZ;
+	my_settings.color_space = gSLIC::CIELAB;
 	my_settings.seg_method = gSLIC::GIVEN_SIZE;
 
 	my_settings.useGPU = true;
@@ -96,7 +97,7 @@ void main()
 
 		imshow("frame", frame);
 
-		if( waitKey(10) == 27 )break;
+		if( waitKey(1) == 27 )break;
 	}
 
 	destroyAllWindows();
