@@ -10,11 +10,13 @@
 - OpenCV: optional (only if you want to run the demo, opencv is used for reading camera input) 
 
 ## To run demo:
+- plug in a webcam
 ```
 mkdir build
 cd build
 cmake ../
 make
+./demo
 ```
 ## Paper to cite:
 If you use this code for your research, please kindly cite:
