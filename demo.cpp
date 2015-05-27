@@ -57,10 +57,10 @@ int main()
 	my_settings.no_segs = 2000;
 	my_settings.spixel_size = 16;
 	my_settings.coh_weight = 0.6f;
-	my_settings.no_iters = 10;
+	my_settings.no_iters = 5;
 	my_settings.color_space = gSLIC::XYZ; // gSLIC::CIELAB for Lab, or gSLIC::RGB for RGB
 	my_settings.seg_method = gSLIC::GIVEN_SIZE; // or gSLIC::GIVEN_NUM for given number
-	my_settings.do_enforce_connectivity = true; //
+	my_settings.do_enforce_connectivity = true; // wheter or not run the enforce connectivity step
 
 	// instantiate a core_engine
 	gSLIC::engines::core_engine* gSLIC_engine = new gSLIC::engines::core_engine(my_settings);
