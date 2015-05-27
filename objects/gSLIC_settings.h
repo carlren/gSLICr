@@ -11,11 +11,8 @@ namespace gSLIC
 			int no_segs;
 			int spixel_size;
 			int no_iters;
-			float coh_weight;
-			
-			bool enforce_connectivity;
-
-			bool useGPU; // to be removed
+			float coh_weight;			
+			bool do_enforce_connectivity;
 
 			COLOR_SPACE color_space;
 			SEG_METHOD seg_method;

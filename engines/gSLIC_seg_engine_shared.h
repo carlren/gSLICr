@@ -174,11 +174,30 @@ _CPU_AND_GPU_CODE_ inline void finalize_reduction_result_shared(const gSLIC::obj
 
 _CPU_AND_GPU_CODE_ inline void supress_local_lable(const int* in_idx_img, int* out_idx_img, gSLIC::Vector2i img_size, int x, int y)
 {
-	if (x == 0 || y == 0 || x == img_size.x - 1 || y == img_size.y - 1) return;
+	int clable = in_idx_img[y*img_size.x + x];
 
-	for (int y = -1; y <= 1; y++) for (int x = -1; x <= 1; x++)
-	{
-
+	// don't suppress boundary
+	if (x <= 1 || y <= 1 || x >= img_size.x - 2 || y >= img_size.y - 2)
+	{ 
+		out_idx_img[y*img_size.x + x] = clable;
+		return; 
 	}
 
+	int diff_count = 0;
+	int diff_lable = -1;
+
+	for (int j = -2; j <= 2; j++) for (int i = -2; i <= 2; i++)
+	{
+		int nlable = in_idx_img[(y + j)*img_size.x + (x + i)];
+		if (nlable!=clable)
+		{
+			diff_lable = nlable;
+			diff_count++;
+		}
+	}
+
+	if (diff_count>=16)
+		out_idx_img[y*img_size.x + x] = diff_lable;
+	else
+		out_idx_img[y*img_size.x + x] = clable;
 }

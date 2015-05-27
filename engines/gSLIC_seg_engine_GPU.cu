@@ -1,8 +1,6 @@
 #include "gSLIC_seg_engine_GPU.h"
 #include "gSLIC_seg_engine_shared.h"
 
-#include "../gSLIC_io_tools.h"
-
 using namespace std;
 using namespace gSLIC;
 using namespace gSLIC::objects;
