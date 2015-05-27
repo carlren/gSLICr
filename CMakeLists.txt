@@ -12,10 +12,9 @@ ELSE(MSVC_IDE)
   set(CMAKE_CXX_FLAGS "-fPIC -O3 -march=native ${CFLAGS_WARN} ${CMAKE_CXX_FLAGS}")
 ENDIF(MSVC_IDE)
 
-IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++ -Wno-deprecated-declarations -Wno-unused-function")
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libstdc++")
-ENDIF()
+if(APPLE)
+  set(CUDA_HOST_COMPILER /usr/bin/clang)
+endif(APPLE)
 
 include_directories(${CUDA_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
@@ -47,14 +46,12 @@ SOURCE_GROUP(objects FILES ${GSLIC_OBJECTS})
 SOURCE_GROUP(utils FILES ${GSLIC_UTILS})
 
 cuda_add_library(gSLIC2_lib
-			${GSLIC_ENGINES} 
-			${GSLIC_OBJECTS} 
+			${GSLIC_ENGINES}
+			${GSLIC_OBJECTS}
 			${ORUTILS_HEADERS}
 			${GSLIC_UTILS}
-			OPTIONS -gencode arch=compute_11,code=compute_11 -gencode arch=compute_30,code=compute_30)
+			OPTIONS -gencode arch=compute_30,code=compute_30)
 target_link_libraries(gSLIC2_lib ${CUDA_LIBRARY})
 
 add_executable(demo demo.cpp)
 target_link_libraries(demo gSLIC2_lib ${OpenCV_LIBS})
-
-
