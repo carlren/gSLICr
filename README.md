@@ -16,5 +16,16 @@ cd build
 cmake ../
 make
 ```
+## Paper to cite:
+If you use this code for your research, please kindly cite:
+```
+@article{gSLIC_2011,
+	author = {Carl Yuheng Ren and Ian Reid},
+	title = "{gSLIC: a real-time implementation of SLIC superpixel segmentation}",
+	journal = {Oxford University Technical Report},
+	year = 2011
+}
+```
+(this is a old version of the repot for now, will be updated a bit later)
 
 MIT licence
