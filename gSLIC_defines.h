@@ -9,13 +9,11 @@
 
 //------------------------------------------------------
 // 
-// Compile time GPU Settings
+// Compile time GPU Settings, don't touch it!
 //
 //------------------------------------------------------
 
-#define MAX_BLOCK_SIZE  1024
 #define BLOCK_DIM		16
-#define MAX_SPIXEL_SIZE 32
 
 namespace gSLIC
 {
@@ -70,8 +68,7 @@ namespace gSLIC
 	{
 		CIELAB = 0,
 		XYZ,
-		RGB,
-		GRAY
+		RGB
 	} COLOR_SPACE;
 
 	typedef enum

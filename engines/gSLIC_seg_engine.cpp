@@ -1,8 +1,6 @@
 #pragma once
 #include "gSLIC_seg_engine.h"
 
-#include "../gSLIC_io_tools.h"
-
 using namespace std;
 using namespace gSLIC;
 using namespace gSLIC::objects;
@@ -29,20 +27,16 @@ void seg_engine::Perform_Segmentation(UChar4Image* in_img)
 	Cvt_Img_Space(source_img, cvt_img, gslic_settings.color_space);
 
 	Init_Cluster_Centers();
+	Find_Center_Association();
 
 	for (int i = 0; i < gslic_settings.no_iters; i++)
 	{
-		Find_Center_Association();
 		Update_Cluster_Center();
+		Find_Center_Association();
 	}
-	Find_Center_Association();
-	//Enforce_Connectivity();
+
+	if(gslic_settings.do_enforce_connectivity) Enforce_Connectivity();
 	cudaThreadSynchronize();
-}
-
-void seg_engine::Enforce_Connectivity()
-{
-
 }
 
 

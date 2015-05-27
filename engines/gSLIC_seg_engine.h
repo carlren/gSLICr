@@ -11,6 +11,10 @@ namespace gSLIC
 		{
 		protected:
 
+			// normalizing distances
+			float max_color_dist;
+			float max_xy_dist;
+
 			// images
 			UChar4Image *source_img;
 			Float4Image *cvt_img;
@@ -20,18 +24,13 @@ namespace gSLIC
 			SpixelMap* spixel_map;
 			int spixel_size;
 
-			bool has_segmented;
-			bool has_img_loaded;
-
 			objects::settings gslic_settings;
-
-
 
 			virtual void Cvt_Img_Space(UChar4Image* inimg, Float4Image* outimg, COLOR_SPACE color_space) = 0;
 			virtual void Init_Cluster_Centers() = 0;
 			virtual void Find_Center_Association() = 0;
 			virtual void Update_Cluster_Center() = 0;
-			virtual void Enforce_Connectivity();
+			virtual void Enforce_Connectivity() = 0;
 
 		public:
 
@@ -39,8 +38,8 @@ namespace gSLIC
 			virtual ~seg_engine();
 
 			const IntImage* Get_Seg_Mask() const {
-				if (has_segmented) return idx_img;
-				else return NULL;
+				idx_img->UpdateHostFromDevice();
+				return idx_img;
 			};
 
 			void Perform_Segmentation(UChar4Image* in_img);
