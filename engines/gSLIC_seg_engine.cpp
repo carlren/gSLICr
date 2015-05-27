@@ -23,7 +23,7 @@ seg_engine::~seg_engine()
 
 void seg_engine::Perform_Segmentation(UChar4Image* in_img)
 {
-	source_img->SetFrom(in_img, UChar4Image::MemoryCopyDirection::CPU_TO_CUDA);
+	source_img->SetFrom(in_img, ORUtils::MemoryBlock<Vector4u>::CPU_TO_CUDA);
 	Cvt_Img_Space(source_img, cvt_img, gslic_settings.color_space);
 
 	Init_Cluster_Centers();

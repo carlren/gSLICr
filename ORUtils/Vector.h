@@ -4,7 +4,7 @@
 
 #include <math.h>
 #include <ostream>
-
+#include "MathUtils.h"
 namespace ORUtils {
 	//////////////////////////////////////////////////////////////////////////
 	//						Basic Vector Structure

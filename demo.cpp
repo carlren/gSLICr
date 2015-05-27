@@ -39,14 +39,14 @@ void load_image(const gSLIC::UChar4Image* inimg, Mat& outimg)
 }
 
 
-void main()
+int main()
 {
 	VideoCapture cap(0);
 
 	if (!cap.isOpened()) 
 	{
 		cerr << "unable to open camera!\n";
-		return;
+		return -1;
 	}
 	
 
@@ -56,8 +56,8 @@ void main()
 	my_settings.img_size.y = 480;
 	my_settings.no_segs = 2000;
 	my_settings.spixel_size = 16;
-	my_settings.coh_weight = 0.8f;
-	my_settings.no_iters = 5;
+	my_settings.coh_weight = 0.6f;
+	my_settings.no_iters = 10;
 	my_settings.color_space = gSLIC::XYZ; // gSLIC::CIELAB for Lab, or gSLIC::RGB for RGB
 	my_settings.seg_method = gSLIC::GIVEN_SIZE; // or gSLIC::GIVEN_NUM for given number
 	my_settings.do_enforce_connectivity = true; //
@@ -91,11 +91,11 @@ void main()
 		else if (key == 's')
 		{
 			char out_name[100];
-			sprintf_s(out_name, "seg_%04i.pgm", save_count);
+			sprintf(out_name, "seg_%04i.pgm", save_count);
 			gSLIC_engine->Write_Seg_Res_To_PGM(out_name);
-			sprintf_s(out_name, "edge_%04i.png", save_count);
+			sprintf(out_name, "edge_%04i.png", save_count);
 			imwrite(out_name, boundry_draw_frame);
-			sprintf_s(out_name, "img_%04i.png", save_count);
+			sprintf(out_name, "img_%04i.png", save_count);
 			imwrite(out_name, frame);
 			printf("\nsaved segmentation %04i\n", save_count);
 			save_count++;
@@ -103,4 +103,5 @@ void main()
 	}
 
 	destroyAllWindows();
+    return 0;
 }
