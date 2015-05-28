@@ -2,11 +2,11 @@
 ## Notes of 2.0
 - Fully re-factored code.
 - Works for any size / number of super pixels
+- With GTX Titan Black, 4.5ms@640x480, 13ms@1280x960, 25ms@1920x1080 image
+- Multi-platform supported
   - Win8 Visual Studio 
   - Ubuntu 14.04
   - Mac OSX 10.10
-- With GTX Titan Black, 4.5ms@640x480, 13ms@1280x960, 25ms@1920x1080 image
-- Multi-platform supported
 
 ## Requirements:
 - CUDA: required
