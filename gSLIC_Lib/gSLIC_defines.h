@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ORUtils/PlatformIndependence.h"
-#include "ORUtils/Vector.h"
-#include "ORUtils/Matrix.h"
-#include "ORUtils/Image.h"
-#include "ORUtils/MathUtils.h"
-#include "ORUtils/MemoryBlock.h"
+#include "../ORUtils/PlatformIndependence.h"
+#include "../ORUtils/Vector.h"
+#include "../ORUtils/Matrix.h"
+#include "../ORUtils/Image.h"
+#include "../ORUtils/MathUtils.h"
+#include "../ORUtils/MemoryBlock.h"
 
 //------------------------------------------------------
 // 
@@ -13,7 +13,9 @@
 //
 //------------------------------------------------------
 
+#ifndef BLOCK_DIM
 #define BLOCK_DIM		16
+#endif
 
 namespace gSLIC
 {

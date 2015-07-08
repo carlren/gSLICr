@@ -1,6 +1,6 @@
 #pragma once
 #include "gSLIC_seg_engine_GPU.h"
-#include "../NVTimer.h"
+
 
 namespace gSLIC
 {
@@ -11,7 +11,6 @@ namespace gSLIC
 		private:
 
 			seg_engine* slic_seg_engine;
-			StopWatchInterface *slic_timer;
 
 		public:
 

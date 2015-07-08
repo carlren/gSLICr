@@ -1,8 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 project(gSLIC2)
 
+
+#SET (CMAKE_VERBOSE_MAKEFILE true)
+
 find_package(CUDA REQUIRED)
 find_package(OpenCV REQUIRED)
+
 
 IF(MSVC_IDE)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -18,38 +22,28 @@ endif(APPLE)
 
 include_directories(${CUDA_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
-
 add_subdirectory(ORUtils)
 
-set(GSLIC_ENGINES
-engines/gSLIC_core_engine.h
-engines/gSLIC_seg_engine.h
-engines/gSLIC_seg_engine_GPU.h
-engines/gSLIC_seg_engine_shared.h
-engines/gSLIC_core_engine.cpp
-engines/gSLIC_seg_engine.cpp
-engines/gSLIC_seg_engine_GPU.cu
+set(GSLIC_LIB
+gSLIC_Lib/engines/gSLIC_core_engine.h
+gSLIC_Lib/engines/gSLIC_seg_engine.h
+gSLIC_Lib/engines/gSLIC_seg_engine_GPU.h
+gSLIC_Lib/engines/gSLIC_seg_engine_shared.h
+gSLIC_Lib/engines/gSLIC_core_engine.cpp
+gSLIC_Lib/engines/gSLIC_seg_engine.cpp
+gSLIC_Lib/engines/gSLIC_seg_engine_GPU.cu
+gSLIC_Lib/objects/gSLIC_settings.h
+gSLIC_Lib/objects/gSLIC_spixel_info.h
+gSLIC_Lib/gSLIC_defines.h
+gSLIC_Lib/gSLIC.h
 )
 
-set(GSLIC_OBJECTS
-objects/gSLIC_settings.h
-objects/gSLIC_spixel_info.h
-)
-
-set(GSLIC_UTILS
-gSLIC_defines.h
-NVTimer.h
-)
-
-SOURCE_GROUP(engines FILES ${GSLIC_ENGINES})
-SOURCE_GROUP(objects FILES ${GSLIC_OBJECTS})
-SOURCE_GROUP(utils FILES ${GSLIC_UTILS})
+list(APPEND "-std=c++11 -ftree-vectorize")
+SOURCE_GROUP(engines FILES ${GSLIC_LIB})
 
 cuda_add_library(gSLIC2_lib
-			${GSLIC_ENGINES}
-			${GSLIC_OBJECTS}
-			${ORUTILS_HEADERS}
-			${GSLIC_UTILS}
+			${GSLIC_LIB}
+			NVTimer.h
 			OPTIONS -gencode arch=compute_30,code=compute_30)
 target_link_libraries(gSLIC2_lib ${CUDA_LIBRARY})
 

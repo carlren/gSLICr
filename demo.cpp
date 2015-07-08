@@ -1,11 +1,14 @@
 #include <time.h>
 #include <stdio.h>
 
-#include "engines/gSLIC_core_engine.h"
+#include "gSLIC_Lib/gSLIC.h"
+#include "NVTimer.h"
 
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/core/core.hpp"
 #include "opencv2/opencv.hpp"
+
+
 
 using namespace std;
 using namespace cv;
@@ -73,14 +76,20 @@ int main()
 	Mat oldFrame, frame;
 	Mat boundry_draw_frame; boundry_draw_frame.create(s, CV_8UC3);
 
+    StopWatchInterface *my_timer; sdkCreateTimer(&my_timer);
+    
 	int key; int save_count = 0;
 	while (cap.read(oldFrame))
 	{
 		resize(oldFrame, frame, s);
 		
 		load_image(frame, in_img);
-
+        
+        sdkResetTimer(&my_timer); sdkStartTimer(&my_timer);
 		gSLIC_engine->Process_Frame(in_img);
+        sdkStopTimer(&my_timer); 
+        cout<<"\rsegmentation in:["<<sdkGetTimerValue(&my_timer)<<"]ms"<<flush;
+        
 		gSLIC_engine->Draw_Segmentation_Result(out_img);
 		
 		load_image(out_img, boundry_draw_frame);
