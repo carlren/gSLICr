@@ -38,4 +38,3 @@ If you use this code for your research, please kindly cite:
 ```
 (this is a old version of the repot for now, will be updated a bit later)
 
-MIT licence
