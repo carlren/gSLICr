@@ -1,4 +1,9 @@
 # gSLIC real-time super-pixel segmentation software
+
+gSLIC is a library for real-time superpixel segmentation written in C++ and CUDA, authored by [Carl Yuheng Ren](http://carlyuheng.com/).
+
+It is available free for non-commercial use, and may be redistributed under these conditions. For commercial use, please contact [ren@carlyuheng.com](ren@carlyuheng.com).
+
 ## Notes of 2.0
 - Fully re-factored code.
 - Works for any size / number of super pixels
