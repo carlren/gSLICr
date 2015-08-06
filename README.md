@@ -1,4 +1,4 @@
-# gSLIC real-time super-pixel segmentation software
+# gSLIC: Real-time super-pixel segmentation software
 
 ![sample](sample.bmp)
 
