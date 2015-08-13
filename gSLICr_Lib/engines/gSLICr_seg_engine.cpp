@@ -1,3 +1,5 @@
+// Copyright 2014-2015 Isis Innovation Limited and the authors of gSLICr
+
 #pragma once
 #include "gSLICr_seg_engine.h"
 

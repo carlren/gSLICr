@@ -1,3 +1,5 @@
+// Copyright 2014-2015 Isis Innovation Limited and the authors of gSLICr
+
 #include "gSLICr_seg_engine_GPU.h"
 #include "gSLICr_seg_engine_shared.h"
 
