@@ -1,24 +1,21 @@
 cmake_minimum_required(VERSION 2.8)
-project(gSLIC2)
-
-
-#SET (CMAKE_VERBOSE_MAKEFILE true)
-
-find_package(CUDA REQUIRED)
-find_package(OpenCV REQUIRED)
-
-
+project(gSLICr)
+  
 IF(MSVC_IDE)
+  set(OpenCV_STATIC OFF)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   add_definitions(-DUSING_CMAKE=1)
 ELSE(MSVC_IDE)
   set(CFLAGS_WARN "-Wall -Wextra -Wno-unused-parameter -Wno-strict-aliasing")
-  set(CMAKE_CXX_FLAGS "-fPIC -O3 -march=native ${CFLAGS_WARN} ${CMAKE_CXX_FLAGS}")
+  set(CMAKE_CXX_FLAGS "-fPIC -O3 -march=native ${CFLAGS_WARN} ${CMAKE_CXX_FLAGS} /ML")
 ENDIF(MSVC_IDE)
 
 if(APPLE)
   set(CUDA_HOST_COMPILER /usr/bin/clang)
 endif(APPLE)
+
+find_package(CUDA REQUIRED)
+find_package(OpenCV REQUIRED)
 
 include_directories(${CUDA_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})

@@ -42,21 +42,21 @@ seg_engine_GPU::seg_engine_GPU(const settings& in_settings) : seg_engine(in_sett
 	if (in_settings.seg_method == GIVEN_NUM)
 	{
 		float cluster_size = (float)(in_settings.img_size.x * in_settings.img_size.x) / (float)in_settings.no_segs;
-		spixel_size = ceil(sqrtf(cluster_size));
+		spixel_size = (int)ceil(sqrtf(cluster_size));
 	}
 	else
 	{
 		spixel_size = in_settings.spixel_size;
 	}
 	
-	int spixel_per_col = ceil(in_settings.img_size.x / spixel_size);
-	int spixel_per_row = ceil(in_settings.img_size.y / spixel_size);
+	int spixel_per_col = (int)ceil(in_settings.img_size.x / spixel_size);
+	int spixel_per_row = (int)ceil(in_settings.img_size.y / spixel_size);
 	
 	Vector2i map_size = Vector2i(spixel_per_col, spixel_per_row);
 	spixel_map = new SpixelMap(map_size, true, true);
 
-	float total_pixel_to_search = spixel_size * spixel_size * 9;
-	no_grid_per_center = ceil(total_pixel_to_search / (float)(BLOCK_DIM * BLOCK_DIM));
+	float total_pixel_to_search = (float)(spixel_size * spixel_size * 9);
+	no_grid_per_center = (int)ceil(total_pixel_to_search / (float)(BLOCK_DIM * BLOCK_DIM));
 
 	map_size.x *= no_grid_per_center;
 	accum_map = new ORUtils::Image<spixel_info>(map_size, true, true);
