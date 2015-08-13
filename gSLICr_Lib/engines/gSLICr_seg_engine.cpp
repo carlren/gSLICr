@@ -1,15 +1,15 @@
 #pragma once
-#include "gSLIC_seg_engine.h"
+#include "gSLICr_seg_engine.h"
 
 using namespace std;
-using namespace gSLIC;
-using namespace gSLIC::objects;
-using namespace gSLIC::engines;
+using namespace gSLICr;
+using namespace gSLICr::objects;
+using namespace gSLICr::engines;
 
 
 seg_engine::seg_engine(const objects::settings& in_settings)
 {
-	gslic_settings = in_settings;
+	gSLICr_settings = in_settings;
 }
 
 
@@ -24,18 +24,18 @@ seg_engine::~seg_engine()
 void seg_engine::Perform_Segmentation(UChar4Image* in_img)
 {
 	source_img->SetFrom(in_img, ORUtils::MemoryBlock<Vector4u>::CPU_TO_CUDA);
-	Cvt_Img_Space(source_img, cvt_img, gslic_settings.color_space);
+	Cvt_Img_Space(source_img, cvt_img, gSLICr_settings.color_space);
 
 	Init_Cluster_Centers();
 	Find_Center_Association();
 
-	for (int i = 0; i < gslic_settings.no_iters; i++)
+	for (int i = 0; i < gSLICr_settings.no_iters; i++)
 	{
 		Update_Cluster_Center();
 		Find_Center_Association();
 	}
 
-	if(gslic_settings.do_enforce_connectivity) Enforce_Connectivity();
+	if(gSLICr_settings.do_enforce_connectivity) Enforce_Connectivity();
 	cudaThreadSynchronize();
 }
 

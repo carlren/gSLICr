@@ -1,10 +1,10 @@
-#include "gSLIC_seg_engine_GPU.h"
-#include "gSLIC_seg_engine_shared.h"
+#include "gSLICr_seg_engine_GPU.h"
+#include "gSLICr_seg_engine_shared.h"
 
 using namespace std;
-using namespace gSLIC;
-using namespace gSLIC::objects;
-using namespace gSLIC::engines;
+using namespace gSLICr;
+using namespace gSLICr::objects;
+using namespace gSLICr::engines;
 
 // ----------------------------------------------------
 //
@@ -42,21 +42,21 @@ seg_engine_GPU::seg_engine_GPU(const settings& in_settings) : seg_engine(in_sett
 	if (in_settings.seg_method == GIVEN_NUM)
 	{
 		float cluster_size = (float)(in_settings.img_size.x * in_settings.img_size.x) / (float)in_settings.no_segs;
-		spixel_size = ceil(sqrtf(cluster_size));
+		spixel_size = (int)ceil(sqrtf(cluster_size));
 	}
 	else
 	{
 		spixel_size = in_settings.spixel_size;
 	}
 	
-	int spixel_per_col = ceil(in_settings.img_size.x / spixel_size);
-	int spixel_per_row = ceil(in_settings.img_size.y / spixel_size);
+	int spixel_per_col = (int)ceil(in_settings.img_size.x / spixel_size);
+	int spixel_per_row = (int)ceil(in_settings.img_size.y / spixel_size);
 	
 	Vector2i map_size = Vector2i(spixel_per_col, spixel_per_row);
 	spixel_map = new SpixelMap(map_size, true, true);
 
-	float total_pixel_to_search = spixel_size * spixel_size * 9;
-	no_grid_per_center = ceil(total_pixel_to_search / (float)(BLOCK_DIM * BLOCK_DIM));
+	float total_pixel_to_search = (float)(spixel_size * spixel_size * 9);
+	no_grid_per_center = (int)ceil(total_pixel_to_search / (float)(BLOCK_DIM * BLOCK_DIM));
 
 	map_size.x *= no_grid_per_center;
 	accum_map = new ORUtils::Image<spixel_info>(map_size, true, true);
@@ -80,13 +80,13 @@ seg_engine_GPU::seg_engine_GPU(const settings& in_settings) : seg_engine(in_sett
 	max_xy_dist *= max_xy_dist;
 }
 
-gSLIC::engines::seg_engine_GPU::~seg_engine_GPU()
+gSLICr::engines::seg_engine_GPU::~seg_engine_GPU()
 {
 	delete accum_map;
 }
 
 
-void gSLIC::engines::seg_engine_GPU::Cvt_Img_Space(UChar4Image* inimg, Float4Image* outimg, COLOR_SPACE color_space)
+void gSLICr::engines::seg_engine_GPU::Cvt_Img_Space(UChar4Image* inimg, Float4Image* outimg, COLOR_SPACE color_space)
 {
 	Vector4u* inimg_ptr = inimg->GetData(MEMORYDEVICE_CUDA);
 	Vector4f* outimg_ptr = outimg->GetData(MEMORYDEVICE_CUDA);
@@ -99,7 +99,7 @@ void gSLIC::engines::seg_engine_GPU::Cvt_Img_Space(UChar4Image* inimg, Float4Ima
 
 }
 
-void gSLIC::engines::seg_engine_GPU::Init_Cluster_Centers()
+void gSLICr::engines::seg_engine_GPU::Init_Cluster_Centers()
 {
 	spixel_info* spixel_list = spixel_map->GetData(MEMORYDEVICE_CUDA);
 	Vector4f* img_ptr = cvt_img->GetData(MEMORYDEVICE_CUDA);
@@ -113,7 +113,7 @@ void gSLIC::engines::seg_engine_GPU::Init_Cluster_Centers()
 	Init_Cluster_Centers_device << <gridSize, blockSize >> >(img_ptr, spixel_list, map_size, img_size, spixel_size);
 }
 
-void gSLIC::engines::seg_engine_GPU::Find_Center_Association()
+void gSLICr::engines::seg_engine_GPU::Find_Center_Association()
 {
 	spixel_info* spixel_list = spixel_map->GetData(MEMORYDEVICE_CUDA);
 	Vector4f* img_ptr = cvt_img->GetData(MEMORYDEVICE_CUDA);
@@ -125,10 +125,10 @@ void gSLIC::engines::seg_engine_GPU::Find_Center_Association()
 	dim3 blockSize(BLOCK_DIM, BLOCK_DIM);
 	dim3 gridSize((int)ceil((float)img_size.x / (float)blockSize.x), (int)ceil((float)img_size.y / (float)blockSize.y));
 
-	Find_Center_Association_device << <gridSize, blockSize >> >(img_ptr, spixel_list, idx_ptr, map_size, img_size, spixel_size, gslic_settings.coh_weight,max_xy_dist,max_color_dist);
+	Find_Center_Association_device << <gridSize, blockSize >> >(img_ptr, spixel_list, idx_ptr, map_size, img_size, spixel_size, gSLICr_settings.coh_weight,max_xy_dist,max_color_dist);
 }
 
-void gSLIC::engines::seg_engine_GPU::Update_Cluster_Center()
+void gSLICr::engines::seg_engine_GPU::Update_Cluster_Center()
 {
 	spixel_info* accum_map_ptr = accum_map->GetData(MEMORYDEVICE_CUDA);
 	spixel_info* spixel_list_ptr = spixel_map->GetData(MEMORYDEVICE_CUDA);
@@ -150,7 +150,7 @@ void gSLIC::engines::seg_engine_GPU::Update_Cluster_Center()
 	Finalize_Reduction_Result_device<<<gridSize2,blockSize>>>(accum_map_ptr, spixel_list_ptr, map_size, no_grid_per_center);
 }
 
-void gSLIC::engines::seg_engine_GPU::Enforce_Connectivity()
+void gSLICr::engines::seg_engine_GPU::Enforce_Connectivity()
 {
 	int* idx_ptr = idx_img->GetData(MEMORYDEVICE_CUDA);
 	int* tmp_idx_ptr = tmp_idx_img->GetData(MEMORYDEVICE_CUDA);
@@ -163,7 +163,7 @@ void gSLIC::engines::seg_engine_GPU::Enforce_Connectivity()
 	Enforce_Connectivity_device << <gridSize, blockSize >> >(tmp_idx_ptr, idx_ptr, img_size);
 }
 
-void gSLIC::engines::seg_engine_GPU::Draw_Segmentation_Result(UChar4Image* out_img)
+void gSLICr::engines::seg_engine_GPU::Draw_Segmentation_Result(UChar4Image* out_img)
 {
 	Vector4u* inimg_ptr = source_img->GetData(MEMORYDEVICE_CUDA);
 	Vector4u* outimg_ptr = out_img->GetData(MEMORYDEVICE_CUDA);

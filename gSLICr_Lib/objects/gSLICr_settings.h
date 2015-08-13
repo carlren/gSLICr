@@ -1,7 +1,7 @@
 #pragma once
-#include "../gSLIC_defines.h"
+#include "../gSLICr_defines.h"
 
-namespace gSLIC
+namespace gSLICr
 {
 	namespace objects
 	{

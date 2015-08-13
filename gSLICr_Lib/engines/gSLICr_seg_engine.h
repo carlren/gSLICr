@@ -1,9 +1,9 @@
 #pragma once
-#include "../gSLIC_defines.h"
-#include "../objects/gSLIC_settings.h"
-#include "../objects/gSLIC_spixel_info.h"
+#include "../gSLICr_defines.h"
+#include "../objects/gSLICr_settings.h"
+#include "../objects/gSLICr_spixel_info.h"
 
-namespace gSLIC
+namespace gSLICr
 {
 	namespace engines
 	{
@@ -24,7 +24,7 @@ namespace gSLIC
 			SpixelMap* spixel_map;
 			int spixel_size;
 
-			objects::settings gslic_settings;
+			objects::settings gSLICr_settings;
 
 			virtual void Cvt_Img_Space(UChar4Image* inimg, Float4Image* outimg, COLOR_SPACE color_space) = 0;
 			virtual void Init_Cluster_Centers() = 0;

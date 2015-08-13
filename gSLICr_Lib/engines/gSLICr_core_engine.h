@@ -1,8 +1,8 @@
 #pragma once
-#include "gSLIC_seg_engine_GPU.h"
+#include "gSLICr_seg_engine_GPU.h"
 
 
-namespace gSLIC
+namespace gSLICr
 {
 	namespace engines
 	{

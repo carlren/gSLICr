@@ -1,36 +1,36 @@
 #pragma once
-#include "gSLIC_core_engine.h"
+#include "gSLICr_core_engine.h"
 #include <fstream>
 
-using namespace gSLIC;
+using namespace gSLICr;
 using namespace std;
 
-gSLIC::engines::core_engine::core_engine(const objects::settings& in_settings)
+gSLICr::engines::core_engine::core_engine(const objects::settings& in_settings)
 {
 	slic_seg_engine = new seg_engine_GPU(in_settings);
 }
 
-gSLIC::engines::core_engine::~core_engine()
+gSLICr::engines::core_engine::~core_engine()
 {
 		delete slic_seg_engine;
 }
 
-void gSLIC::engines::core_engine::Process_Frame(UChar4Image* in_img)
+void gSLICr::engines::core_engine::Process_Frame(UChar4Image* in_img)
 {
 	slic_seg_engine->Perform_Segmentation(in_img);
 }
 
-const IntImage * gSLIC::engines::core_engine::Get_Seg_Res()
+const IntImage * gSLICr::engines::core_engine::Get_Seg_Res()
 {
 	return slic_seg_engine->Get_Seg_Mask();
 }
 
-void gSLIC::engines::core_engine::Draw_Segmentation_Result(UChar4Image* out_img)
+void gSLICr::engines::core_engine::Draw_Segmentation_Result(UChar4Image* out_img)
 {
 	slic_seg_engine->Draw_Segmentation_Result(out_img);
 }
 
-void gSLIC::engines::core_engine::Write_Seg_Res_To_PGM(const char* fileName)
+void gSLICr::engines::core_engine::Write_Seg_Res_To_PGM(const char* fileName)
 {
 	const IntImage* idx_img = slic_seg_engine->Get_Seg_Mask();
 	int width = idx_img->noDims.x;

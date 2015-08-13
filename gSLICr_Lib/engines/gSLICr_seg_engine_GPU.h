@@ -1,7 +1,7 @@
 #pragma once
-#include "gSLIC_seg_engine.h"
+#include "gSLICr_seg_engine.h"
 
-namespace gSLIC
+namespace gSLICr
 {
 	namespace engines
 	{

@@ -1,14 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
-project(gSLIC2)
-
-
-#SET (CMAKE_VERBOSE_MAKEFILE true)
-
-find_package(CUDA REQUIRED)
-find_package(OpenCV REQUIRED)
-
-
+project(gSLICr)
+  
 IF(MSVC_IDE)
+  set(OpenCV_STATIC OFF)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
   add_definitions(-DUSING_CMAKE=1)
 ELSE(MSVC_IDE)
@@ -20,32 +14,35 @@ if(APPLE)
   set(CUDA_HOST_COMPILER /usr/bin/clang)
 endif(APPLE)
 
+find_package(CUDA REQUIRED)
+find_package(OpenCV REQUIRED)
+
 include_directories(${CUDA_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
 add_subdirectory(ORUtils)
 
-set(GSLIC_LIB
-gSLIC_Lib/engines/gSLIC_core_engine.h
-gSLIC_Lib/engines/gSLIC_seg_engine.h
-gSLIC_Lib/engines/gSLIC_seg_engine_GPU.h
-gSLIC_Lib/engines/gSLIC_seg_engine_shared.h
-gSLIC_Lib/engines/gSLIC_core_engine.cpp
-gSLIC_Lib/engines/gSLIC_seg_engine.cpp
-gSLIC_Lib/engines/gSLIC_seg_engine_GPU.cu
-gSLIC_Lib/objects/gSLIC_settings.h
-gSLIC_Lib/objects/gSLIC_spixel_info.h
-gSLIC_Lib/gSLIC_defines.h
-gSLIC_Lib/gSLIC.h
+set(GSLICR_LIB
+gSLICr_Lib/engines/gSLICr_core_engine.h
+gSLICr_Lib/engines/gSLICr_seg_engine.h
+gSLICr_Lib/engines/gSLICr_seg_engine_GPU.h
+gSLICr_Lib/engines/gSLICr_seg_engine_shared.h
+gSLICr_Lib/engines/gSLICr_core_engine.cpp
+gSLICr_Lib/engines/gSLICr_seg_engine.cpp
+gSLICr_Lib/engines/gSLICr_seg_engine_GPU.cu
+gSLICr_Lib/objects/gSLICr_settings.h
+gSLICr_Lib/objects/gSLICr_spixel_info.h
+gSLICr_Lib/gSLICr_defines.h
+gSLICr_Lib/gSLICr.h
 )
 
 list(APPEND "-std=c++11 -ftree-vectorize")
-SOURCE_GROUP(engines FILES ${GSLIC_LIB})
+SOURCE_GROUP(engines FILES ${GSLICR_LIB})
 
-cuda_add_library(gSLIC2_lib
-			${GSLIC_LIB}
+cuda_add_library(gSLICr_lib
+			${GSLICR_LIB}
 			NVTimer.h
 			OPTIONS -gencode arch=compute_30,code=compute_30)
-target_link_libraries(gSLIC2_lib ${CUDA_LIBRARY})
+target_link_libraries(gSLICr_lib ${CUDA_LIBRARY})
 
 add_executable(demo demo.cpp)
-target_link_libraries(demo gSLIC2_lib ${OpenCV_LIBS})
+target_link_libraries(demo gSLICr_lib ${OpenCV_LIBS})

@@ -17,7 +17,7 @@
 #define BLOCK_DIM		16
 #endif
 
-namespace gSLIC
+namespace gSLICr
 {
 	//------------------------------------------------------
 	// 
