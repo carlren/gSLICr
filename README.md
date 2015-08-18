@@ -7,7 +7,6 @@ gSLICr is a library for real-time superpixel segmentation written in C++ and CUD
 It is available free for non-commercial use, and may be redistributed under these conditions. For commercial use, please contact [ren@carlyuheng.com](ren@carlyuheng.com).
 
 ## Updates from gSLIC
-- Fully re-factored code.
 - Works for any size / number of super pixels
 - With GTX Titan Black, 4.5ms@640x480, 13ms@1280x960, 25ms@1920x1080 image
 - Multi-platform supported
