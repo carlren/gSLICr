@@ -27,6 +27,7 @@ cmake ../
 make
 ./demo
 ```
+- press `s` to save current segmentation result to current folder.
 ## Paper to cite:
 If you use this code for your research, please kindly cite:
 ```
