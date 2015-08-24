@@ -31,22 +31,22 @@ void seg_engine::Perform_Segmentation(UChar4Image* in_img)
 	source_img->SetFrom(in_img, ORUtils::MemoryBlock<Vector4u>::CPU_TO_CUDA);
 	Cvt_Img_Space(source_img, cvt_img, gSLICr_settings.color_space);
 
-    StopWatchInterface *my_timer; sdkCreateTimer(&my_timer);
+//    StopWatchInterface *my_timer; sdkCreateTimer(&my_timer);
     
 	Init_Cluster_Centers();
 	Find_Center_Association();
 
 	for (int i = 0; i < gSLICr_settings.no_iters; i++)
 	{
-         sdkResetTimer(&my_timer); sdkStartTimer(&my_timer);
+//         sdkResetTimer(&my_timer); sdkStartTimer(&my_timer);
 		Update_Cluster_Center();
-        cudaThreadSynchronize();
-        sdkStopTimer(&my_timer);
-        cout<<"\rupdate cluster center in:["<<sdkGetTimerValue(&my_timer)<<"]ms";
-        sdkResetTimer(&my_timer); sdkStartTimer(&my_timer);
+//        cudaThreadSynchronize();
+//        sdkStopTimer(&my_timer);
+//        cout<<"\rupdate cluster center in:["<<sdkGetTimerValue(&my_timer)<<"]ms";
+//        sdkResetTimer(&my_timer); sdkStartTimer(&my_timer);
 		Find_Center_Association();
-        cudaThreadSynchronize();
-         cout<<"\tfind association in:["<<sdkGetTimerValue(&my_timer)<<"]ms"<<flush;
+//        cudaThreadSynchronize();
+//         cout<<"\tfind association in:["<<sdkGetTimerValue(&my_timer)<<"]ms"<<flush;
 	}
 
 	if(gSLICr_settings.do_enforce_connectivity) Enforce_Connectivity();

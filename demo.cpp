@@ -90,7 +90,7 @@ int main()
         sdkResetTimer(&my_timer); sdkStartTimer(&my_timer);
 		gSLICr_engine->Process_Frame(in_img);
         sdkStopTimer(&my_timer);
-        //cout<<"\tsegmentation in:["<<sdkGetTimerValue(&my_timer)<<"]ms"<<endl;
+        cout<<"\rsegmentation in:["<<sdkGetTimerValue(&my_timer)<<"]ms"<<flush;
 
 		gSLICr_engine->Draw_Segmentation_Result(out_img);
 
