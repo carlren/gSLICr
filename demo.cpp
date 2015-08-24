@@ -48,12 +48,12 @@ int main()
 {
 	VideoCapture cap(0);
 
-	if (!cap.isOpened()) 
+	if (!cap.isOpened())
 	{
 		cerr << "unable to open camera!\n";
 		return -1;
 	}
-	
+
 
 	// gSLICr settings
 	gSLICr::objects::settings my_settings;
@@ -65,7 +65,7 @@ int main()
 	my_settings.no_iters = 5;
 	my_settings.color_space = gSLICr::XYZ; // gSLICr::CIELAB for Lab, or gSLICr::RGB for RGB
 	my_settings.seg_method = gSLICr::GIVEN_SIZE; // or gSLICr::GIVEN_NUM for given number
-	my_settings.do_enforce_connectivity = true; // wheter or not run the enforce connectivity step
+	my_settings.do_enforce_connectivity = false; // wheter or not run the enforce connectivity step
 
 	// instantiate a core_engine
 	gSLICr::engines::core_engine* gSLICr_engine = new gSLICr::engines::core_engine(my_settings);
@@ -79,21 +79,21 @@ int main()
 	Mat boundry_draw_frame; boundry_draw_frame.create(s, CV_8UC3);
 
     StopWatchInterface *my_timer; sdkCreateTimer(&my_timer);
-    
+
 	int key; int save_count = 0;
 	while (cap.read(oldFrame))
 	{
 		resize(oldFrame, frame, s);
-		
+
 		load_image(frame, in_img);
-        
+
         sdkResetTimer(&my_timer); sdkStartTimer(&my_timer);
 		gSLICr_engine->Process_Frame(in_img);
-        sdkStopTimer(&my_timer); 
-        cout<<"\rsegmentation in:["<<sdkGetTimerValue(&my_timer)<<"]ms"<<flush;
-        
+        sdkStopTimer(&my_timer);
+        //cout<<"\tsegmentation in:["<<sdkGetTimerValue(&my_timer)<<"]ms"<<endl;
+
 		gSLICr_engine->Draw_Segmentation_Result(out_img);
-		
+
 		load_image(out_img, boundry_draw_frame);
 		imshow("segmentation", boundry_draw_frame);
 

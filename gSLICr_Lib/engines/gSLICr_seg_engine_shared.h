@@ -133,6 +133,31 @@ _CPU_AND_GPU_CODE_ inline void find_center_association_shared(const gSLICr::Vect
 	if (minidx >= 0) out_idx_img[idx_img] = minidx;
 }
 
+// this is the new one!
+_CPU_AND_GPU_CODE_ inline void find_center_association_shared(const gSLICr::Vector4f* inimg, const gSLICr::objects::spixel_info* local_spixel_map, int* out_idx_img, gSLICr::Vector2i img_size, int spixel_size, float weight, int x, int y, float max_xy_dist, float max_color_dist)
+{
+	int idx_img = y * img_size.x + x;
+
+	int minidx = -1;
+	float dist = 999999.9999f;
+
+	// search 3x3 neighborhood
+    
+    for (int i=0;i<9;i++){
+        if (local_spixel_map[i].id>=0){
+            float cdist = compute_slic_distance(inimg[idx_img], x, y, local_spixel_map[i], weight, max_xy_dist, max_color_dist);
+            if (cdist < dist)
+			{
+				dist = cdist;
+				minidx = local_spixel_map[i].id;
+			}
+        }    
+    }
+    
+
+	if (minidx >= 0) out_idx_img[idx_img] = minidx;
+}
+
 _CPU_AND_GPU_CODE_ inline void draw_superpixel_boundry_shared(const int* idx_img, gSLICr::Vector4u* sourceimg, gSLICr::Vector4u* outimg, gSLICr::Vector2i img_size, int x, int y)
 {
 	int idx = y * img_size.x + x;
