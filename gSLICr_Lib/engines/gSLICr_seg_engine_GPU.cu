@@ -218,32 +218,34 @@ __global__ void Find_Center_Association_device(const Vector4f* inimg, const spix
 	int x = threadIdx.x + blockIdx.x * blockDim.x, y = threadIdx.y + blockIdx.y * blockDim.y;
 	if (x > img_size.x - 1 || y > img_size.y - 1) return;
     
-//    __shared__ spixel_info local3x3map[9];
+    __shared__ spixel_info local3x3map[9];
     
-//    int local_idx = threadIdx.y * 3 + threadIdx.x;
-//    if (local_idx<9){
+    // first 9 threads load the shared memory
+    if (threadIdx.x <=3 && threadIdx.y <=3){
         
-//        int ctr_x = x / spixel_size;
-//        int ctr_y = y / spixel_size;
+        int local_idx = threadIdx.y * 3 + threadIdx.x;
         
-//        int ctr_x_check = ctr_x + threadIdx.x;
-//        int ctr_y_check = ctr_y + threadIdx.y;
+        int ctr_x = x / spixel_size;
+        int ctr_y = y / spixel_size;
+        
+        int ctr_x_check = ctr_x + threadIdx.x - 1;
+        int ctr_y_check = ctr_y + threadIdx.y - 1;
             
-//            if (ctr_x_check >= 0 && ctr_y_check >= 0 && ctr_x_check < map_size.x && ctr_y_check < map_size.y)
-//            {
-//                int ctr_idx = ctr_y_check*map_size.x + ctr_x_check;
-//                local3x3map[local_idx] = in_spixel_map[ctr_idx];
-//            }else
-//            {
-//                local3x3map[local_idx].id = -1;
-//            }            
-//    }
-//    __syncthreads();
+            if (ctr_x_check >= 0 && ctr_y_check >= 0 && ctr_x_check < map_size.x && ctr_y_check < map_size.y)
+            {
+                int ctr_idx = ctr_y_check*map_size.x + ctr_x_check;
+                local3x3map[local_idx] = in_spixel_map[ctr_idx];
+            }else
+            {
+                local3x3map[local_idx].id = -1;
+            }            
+    }
+    __syncthreads();
     
     
-//    find_center_association_shared(inimg,local3x3map,out_idx_img,img_size,spixel_size,weight,x,y,max_xy_dist,max_color_dist);
+    find_center_association_shared(inimg,local3x3map,out_idx_img,img_size,spixel_size,weight,x,y,max_xy_dist,max_color_dist);
     
-	find_center_association_shared(inimg, in_spixel_map, out_idx_img, map_size, img_size, spixel_size, weight, x, y,max_xy_dist,max_color_dist);
+//	find_center_association_shared(inimg, in_spixel_map, out_idx_img, map_size, img_size, spixel_size, weight, x, y,max_xy_dist,max_color_dist);
 }
 
 __global__ void Update_Cluster_Center_device(const Vector4f* inimg, const int* in_idx_img, spixel_info* accum_map, Vector2i map_size, Vector2i img_size, int spixel_size, int no_blocks_per_line)
