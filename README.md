@@ -56,7 +56,7 @@ make
 ```
 - press `s` to save current segmentation result to current folder.
 
-#3. Building the System
+#3. What to cite
 If you use this code for your research, please kindly cite:
 ```
 @article{gSLICr_2015,
