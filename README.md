@@ -1,25 +1,52 @@
-# gSLICr: Real-time super-pixel segmentation software
+# gSLICr: SLIC superpixels at over 250Hz
 
 ![sample](sample.bmp)
 
-gSLICr is a library for real-time superpixel segmentation written in C++ and CUDA, authored by [Carl Yuheng Ren](http://carlyuheng.com/).
+This is the software bundle "gSLICr", a library for real-time superpixel segmentation written in C++ and CUDA. The current version is maintained by:
 
-It is available free for non-commercial use, and may be redistributed under these conditions. For commercial use, please contact [ren@carlyuheng.com](ren@carlyuheng.com).
+  Carl Yuheng Ren <carl@robots.ox.ac.uk>  
+  Victor Adrian Prisacariu <victor@robots.ox.ac.uk>  
+  Ian D Reid <ian.reid@adelaide.edu.au>  
 
-## Updates from gSLIC
+#1. Updates from gSLIC
 - Works for any size / number of super pixels
-- With GTX Titan Black, 4.5ms@640x480, 13ms@1280x960, 25ms@1920x1080 image
+- With GTX Titan X, 3.4ms@640x480, 12ms@1280x960, 20ms@1920x1080 image
 - Multi-platform supported
-  - Win8 Visual Studio 
+  - Win8 Visual Studio
   - Ubuntu 14.04
   - Mac OSX 10.10
 
-## Requirements:
-- CUDA: required
-- OpenCV: optional (only if you want to run the demo, opencv is used for reading camera input) 
+#2. Building the System
 
-## To run demo:
+###2.1 Requirements
+
+Several 3rd party libraries are needed for compiling gSLICr. The given version numbers are checked and working, but different versions might be fine as well. Some of the libraries are optional, and skipping them will reduce functionality.
+
+  - cmake (e.g. version 2.8.10.2 or 3.2.3)  
+    REQUIRED for Windows and Linux, unless you write your own build system  
+    available at http://www.cmake.org/
+
+  - CUDA (e.g. version 6.0 or 7.0)  
+    REQUIRED for all GPU accelerated code  
+    available at https://developer.nvidia.com/cuda-downloads
+
+  - OpenCV (e.g. version 3.0)  
+    REQUIRED if you want to run the demo, where it is used for reading camera input and displaying UI
+    available at https://developer.nvidia.com/cuda-downloads
+
+###2.2 Build Process
+
+  To compile the system, use the standard cmake approach:
+```
+  $ mkdir build
+  $ cd build
+  $ cmake /path/to/gSLICr
+  $ make
+```
+
+  To run demo:
 - plug in a webcam
+- use the standard cmake approach:
 ```
 mkdir build
 cd build
@@ -29,15 +56,15 @@ make
 ```
 - press `s` to save current segmentation result to current folder.
 
-## Paper to cite:
+#3. Building the System
 If you use this code for your research, please kindly cite:
 ```
-@article{gSLIC_2011,
-	author = {Carl Yuheng Ren and Ian Reid},
-	title = "{gSLIC: a real-time implementation of SLIC superpixel segmentation}",
-	journal = {Oxford University Technical Report},
-	year = 2011
+@article{gSLICr_2015,
+	author = {{Yuheng Ren}, C. and {Prisacariu}, V.~A. and {Reid}, I.~D},
+	title = "{gSLICr: SLIC superpixels at over 250Hz}",
+	journal = {ArXiv e-prints},
+	eprint = {1509.04232},
+	year = 2015,
+	month = sep
 }
 ```
-(this is a old version of the repot for now, will be updated a bit later)
-
