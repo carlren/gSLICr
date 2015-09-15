@@ -4,9 +4,9 @@
 
 This is the software bundle "gSLICr", a library for real-time superpixel segmentation written in C++ and CUDA. The current version is maintained by:
 
-  [Carl Yuheng Ren](http://www.carlyuheng.com/) <carl@robots.ox.ac.uk>  
-  [Victor Adrian Prisacariu](http://www.robots.ox.ac.uk/~victor/) <victor@robots.ox.ac.uk>  
-  Ian D Reid <ian.reid@adelaide.edu.au>  
+  [Carl Yuheng Ren](http://www.carlyuheng.com/) : <carl@robots.ox.ac.uk>  
+  [Victor Adrian Prisacariu](http://www.robots.ox.ac.uk/~victor/) : <victor@robots.ox.ac.uk>  
+  Ian D Reid : <ian.reid@adelaide.edu.au>  
 
 #1. Updates from gSLIC
 - Works for any size / number of super pixels
