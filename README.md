@@ -60,7 +60,7 @@ make
 If you use this code for your research, please kindly cite:
 ```
 @article{gSLICr_2015,
-	author = {{Yuheng Ren}, C. and {Prisacariu}, V.~A. and {Reid}, I.~D},
+	author = {{Ren}, C.~Y and {Prisacariu}, V.~A. and {Reid}, I.~D},
 	title = "{gSLICr: SLIC superpixels at over 250Hz}",
 	journal = {ArXiv e-prints},
 	eprint = {1509.04232},
