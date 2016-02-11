@@ -43,7 +43,7 @@ seg_engine_GPU::seg_engine_GPU(const settings& in_settings) : seg_engine(in_sett
 
 	if (in_settings.seg_method == GIVEN_NUM)
 	{
-		float cluster_size = (float)(in_settings.img_size.x * in_settings.img_size.x) / (float)in_settings.no_segs;
+		float cluster_size = (float)(in_settings.img_size.x * in_settings.img_size.y) / (float)in_settings.no_segs;
 		spixel_size = (int)ceil(sqrtf(cluster_size));
 	}
 	else
