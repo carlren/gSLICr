@@ -36,7 +36,7 @@ Several 3rd party libraries are needed for compiling gSLICr. The given version n
 
   - OpenCV (e.g. version 3.0)  
     REQUIRED if you want to run the demo, where it is used for reading camera input and displaying UI
-    available at https://developer.nvidia.com/cuda-downloads
+    available at http://opencv.org/downloads.html
 
 ###2.2 Build Process
 
