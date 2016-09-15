@@ -65,7 +65,7 @@ int main()
 	my_settings.no_iters = 5;
 	my_settings.color_space = gSLICr::XYZ; // gSLICr::CIELAB for Lab, or gSLICr::RGB for RGB
 	my_settings.seg_method = gSLICr::GIVEN_SIZE; // or gSLICr::GIVEN_NUM for given number
-	my_settings.do_enforce_connectivity = true; // wheter or not run the enforce connectivity step
+	my_settings.do_enforce_connectivity = true; // whether or not run the enforce connectivity step
 
 	// instantiate a core_engine
 	gSLICr::engines::core_engine* gSLICr_engine = new gSLICr::engines::core_engine(my_settings);
