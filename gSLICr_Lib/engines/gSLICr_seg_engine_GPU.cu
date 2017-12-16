@@ -85,6 +85,7 @@ seg_engine_GPU::seg_engine_GPU(const settings& in_settings) : seg_engine(in_sett
 gSLICr::engines::seg_engine_GPU::~seg_engine_GPU()
 {
 	delete accum_map;
+        tmp_idx_img->Free();
 }
 
 
