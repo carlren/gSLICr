@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>gslicr</name>
+  <version>0.0.0</version>
+  <description>This is the software bundle "gSLICr", a library for real-time superpixel segmentation written in C++ and CUDA.</description>
+
+  <maintainer email="Christian.Rauch@ed.ac.uk">Christian Rauch</maintainer>
+
+  <license>TODO</license>
+
+  <url type="repository">https://github.com/carlren/gSLICr</url>
+  <url type="website">https://arxiv.org/abs/1509.04232</url>
+
+  <author email="carl@robots.ox.ac.uk">Carl Yuheng Ren</author>
+  <author email="victor@robots.ox.ac.uk">Victor Adrian Prisacariu</author>
+  <author email="ian.reid@adelaide.edu.au">Ian D Reid</author>
+
+  <buildtool_depend>cmake</buildtool_depend>
+
+  <depend>libopencv-dev</depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
