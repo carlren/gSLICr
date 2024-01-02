@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(gSLICr)
-
-set(CMAKE_CXX_STANDARD 11)
+project(gSLICr LANGUAGES CXX CUDA)
 
 IF(MSVC_IDE)
   set(OpenCV_STATIC OFF)
@@ -16,10 +14,9 @@ if(APPLE)
   set(CUDA_HOST_COMPILER /usr/bin/clang)
 endif(APPLE)
 
-find_package(CUDA REQUIRED)
 find_package(OpenCV REQUIRED)
 
-include_directories(${CUDA_INCLUDE_DIRS})
+include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
 include_directories(${OpenCV_INCLUDE_DIRS})
 add_subdirectory(ORUtils)
 
@@ -40,10 +37,13 @@ gSLICr_Lib/gSLICr.h
 list(APPEND "-ftree-vectorize")
 SOURCE_GROUP(engines FILES ${GSLICR_LIB})
 
-cuda_add_library(gSLICr_lib
-			${GSLICR_LIB}
-			NVTimer.h)
+add_library(gSLICr_lib ${GSLICR_LIB} NVTimer.h)
 target_link_libraries(gSLICr_lib ${CUDA_LIBRARY})
+target_compile_features(gSLICr_lib PUBLIC cxx_std_11)
+set_target_properties(gSLICr_lib
+  PROPERTIES CUDA_SEPARABLE_COMPILATION ON
+  POSITION_INDEPENDENT_CODE ON
+)
 
 add_executable(demo demo.cpp)
 target_link_libraries(demo gSLICr_lib ${OpenCV_LIBS})

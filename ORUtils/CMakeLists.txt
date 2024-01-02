@@ -38,7 +38,7 @@ SOURCE_GROUP("" FILES ${ORUTILS_HEADERS})
 add_library(ORUtils ${ORUTILS_OBJECTS})
 
 IF(WITH_CUDA)
-#  include_directories(${CUDA_INCLUDE_DIRS})
+#  include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
 #  cuda_add_library(ITMLib
 #	${ITMLIB_CPU_OBJECTS}
 #	${ITMLIB_CUDA_OBJECTS}
