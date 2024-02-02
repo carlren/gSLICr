@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 2.8)
-project(gSLICr)
-  
+cmake_minimum_required(VERSION 3.10)
+project(gSLICr LANGUAGES CXX CUDA)
+
 IF(MSVC_IDE)
   set(OpenCV_STATIC OFF)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
@@ -14,10 +14,9 @@ if(APPLE)
   set(CUDA_HOST_COMPILER /usr/bin/clang)
 endif(APPLE)
 
-find_package(CUDA REQUIRED)
 find_package(OpenCV REQUIRED)
 
-include_directories(${CUDA_INCLUDE_DIRS})
+include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
 include_directories(${OpenCV_INCLUDE_DIRS})
 add_subdirectory(ORUtils)
 
@@ -35,14 +34,41 @@ gSLICr_Lib/gSLICr_defines.h
 gSLICr_Lib/gSLICr.h
 )
 
-list(APPEND "-std=c++11 -ftree-vectorize")
+list(APPEND "-ftree-vectorize")
 SOURCE_GROUP(engines FILES ${GSLICR_LIB})
 
-cuda_add_library(gSLICr_lib
-			${GSLICR_LIB}
-			NVTimer.h
-			OPTIONS -gencode arch=compute_30,code=compute_30)
+add_library(gSLICr_lib ${GSLICR_LIB} NVTimer.h)
 target_link_libraries(gSLICr_lib ${CUDA_LIBRARY})
+target_compile_features(gSLICr_lib PUBLIC cxx_std_11)
+set_target_properties(gSLICr_lib
+  PROPERTIES CUDA_SEPARABLE_COMPILATION ON
+  POSITION_INDEPENDENT_CODE ON
+)
 
 add_executable(demo demo.cpp)
 target_link_libraries(demo gSLICr_lib ${OpenCV_LIBS})
+
+include(GNUInstallDirs)
+
+# install library
+install(TARGETS gSLICr_lib EXPORT ${PROJECT_NAME}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+# install header file hierarchy
+file(GLOB_RECURSE HEADER_FILES RELATIVE ${CMAKE_SOURCE_DIR} *.h)
+foreach(HEADER ${HEADER_FILES})
+    string(REGEX MATCH "(.*)[/\\]" DIR ${HEADER})
+    install(FILES ${HEADER} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/${DIR})
+endforeach()
+
+target_include_directories(gSLICr_lib PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>"
+    "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>/${PROJECT_NAME}/gSLICr_Lib/")
+
+# export library
+install(EXPORT ${PROJECT_NAME}
+    DESTINATION share/${PROJECT_NAME}/cmake
+    FILE ${PROJECT_NAME}Config.cmake
+)
